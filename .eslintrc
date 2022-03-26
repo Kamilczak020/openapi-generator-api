@@ -1,0 +1,52 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ],
+  "extends": [
+    "airbnb-typescript/base"
+  ],
+  "rules": {
+    "quotes": ["error", "single"],
+    "max-len": ["warn", { "code": 120, "ignoreUrls": true }],
+    "linebreak-style": "off",
+    "import/no-cycle": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "import/prefer-default-export": "off",
+    "object-curly-newline": "off",
+    "import/no-extraneous-dependencies": "off",
+    "no-restricted-syntax": "off",
+    "import/order": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "class-methods-use-this": "off",
+    "no-unused-vars": "off",
+    "no-underscore-dangle": "off",
+    "no-continue": "off",
+    "no-use-before-define": "off",
+    "no-plusplus": "off",
+    "prefer-rest-params": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "no-cond-assign": "off",
+    "block-scoped-var": "off",
+    "no-fallthrough": "off",
+    "no-nested-ternary": "off",
+    "func-names": "off",
+    "no-console": "off",
+    "import/export": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-redeclare": "off",
+    "no-return-assign": "off",
+    "no-useless-escape": "off",
+    "no-case-declarations": "off",
+    "import/no-webpack-loader-syntax": "off",
+    "no-restricted-globals": "off",
+    "@typescript-eslint/indent": "off",
+    "no-await-in-loop": "off"
+  }
+}

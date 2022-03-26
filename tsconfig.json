@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "module": "esnext",
+    "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
