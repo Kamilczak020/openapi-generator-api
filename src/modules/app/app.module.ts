@@ -1,9 +1,15 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { RequestScopeInjectorMiddleware } from './middleware';
+import { ConfigurationModule } from '../configuration';
+import { CodegenModule } from '../codegen';
 import { LoggerModule } from '../logger';
 
 @Module({
-  imports: [LoggerModule],
+  imports: [
+    LoggerModule.forRoot(),
+    ConfigurationModule,
+    CodegenModule,
+  ],
 })
 export class AppModule {
   public configure(consumer: MiddlewareConsumer) {

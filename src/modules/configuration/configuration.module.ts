@@ -1,4 +1,4 @@
-import { appConfigSchema } from '../../configuration';
+import { appConfigSchema, generatorConfigSchema } from '../../configuration';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
@@ -10,6 +10,7 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         ...appConfigSchema,
+        ...generatorConfigSchema,
       }),
     }),
   ],
