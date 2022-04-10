@@ -6,4 +6,4 @@ export class RequestContext {
 }
 
 export const requestContextAsyncLocalStorage = new AsyncLocalStorage<RequestContext>();
-export const requestContextProvider = () => requestContextAsyncLocalStorage.getStore();
+export const getRequestContext = () => requestContextAsyncLocalStorage.getStore();
