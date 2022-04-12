@@ -26,7 +26,7 @@ export class CodegenService {
     const { schema, generator, generatorOptions } = options;
     const schemaFile = await this.writeSchemaToDisk(schema);
 
-    await this.spawnGenerator(schema, generator, generatorOptions);
+    await this.spawnGenerator(schemaFile, generator, generatorOptions);
   }
 
   private async spawnGenerator(

@@ -1,27 +1,37 @@
-import { appConfigSchema, generatorConfigSchema } from '../../configuration';
+import {
+  appConfigSchema,
+  swaggerConfigSchema,
+  generatorConfigSchema,
+} from '../../configuration';
+import {
+  AppConfigService,
+  SwaggerConfigService,
+  GeneratorConfigService,
+} from './services';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { AppConfigService, GeneratorConfigService } from './services';
-
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
       validationSchema: Joi.object({
-        ...appConfigSchema,
         ...generatorConfigSchema,
+        ...swaggerConfigSchema,
+        ...appConfigSchema,
       }),
     }),
   ],
   providers: [
-    AppConfigService,
     GeneratorConfigService,
+    SwaggerConfigService,
+    AppConfigService,
   ],
   exports: [
-    AppConfigService,
     GeneratorConfigService,
+    SwaggerConfigService,
+    AppConfigService,
   ],
 })
 export class ConfigurationModule { }
