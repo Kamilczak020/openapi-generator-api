@@ -15,4 +15,9 @@ export class GeneratorConfigService {
     const configOutputDirectory = this.configService.get('GENERATOR_OUTPUT_DIR');
     return exists(configOutputDirectory) ? configOutputDirectory : '/output';
   }
+
+  public get tmpDirectory() {
+    const configTmpDirectory = this.configService.get('GENERATOR_TMP_DIR');
+    return exists(configTmpDirectory) ? configTmpDirectory : '/tmp';
+  }
 }

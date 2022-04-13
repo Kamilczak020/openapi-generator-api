@@ -6,24 +6,32 @@
   "author": "Kamil Solecki <kamilczak020@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "node esbuild.mjs --watch --serve",
-    "build": "node esbuild.mjs"
+    "nest:dev": "nest start --watch",
+    "nest:debug": "ls && nest start --debug 0.0.0.0:9229 --watch",
+    "start:prod": "node build/bundle.js",
+    "docker:run": "docker compose up",
+    "docker:run-rebuild": "docker-compose up -V --build"
   },
   "dependencies": {
+    "@anatine/esbuild-decorators": "^0.2.18",
     "@nestjs/common": "^8.4.3",
     "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.4.3",
     "@nestjs/platform-express": "^8.4.3",
+    "@nestjs/swagger": "^5.2.1",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "chalk": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "date-fns": "^2.28.0",
+    "esbuild-plugin-tsc": "^0.3.0",
     "joi": "^17.6.0",
     "json-stringify-pretty-compact": "^3.0.0",
+    "npm-run-all": "^4.1.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.5",
+    "swagger-ui-express": "^4.3.0",
     "winston": "^3.6.0"
   },
   "devDependencies": {
@@ -48,8 +56,10 @@
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
     "live-server": "^1.2.1",
+    "nodemon": "^2.0.15",
     "source-map-support": "^0.5.21",
     "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
 }

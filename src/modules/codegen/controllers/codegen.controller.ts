@@ -1,10 +1,25 @@
-import { Body, Controller, Get } from '@nestjs/common';
-import { GenerateApiClientRequest } from '../dto/request/generateApiClient.request';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from '../dto/request';
+import { CodegenService } from '../services';
 
 @Controller('codegen')
 export class CodegenController {
-  @Get('/')
-  public async generate(@Body() request: GenerateApiClientRequest) {
-    
+  public constructor(private readonly codegenService: CodegenService) { }
+
+  @Get('/generators')
+  public async getGenerators() {
+    return this.codegenService.enumerateGenerators();
+  }
+
+  @Post('/:generator')
+  public async generate(
+    @Req() request: GenerateApiClientRequestParams,
+    @Body() body: GenerateApiClientRequestBody,
+  ) {
+    return this.codegenService.generate({
+      generatorOptions: body.generatorOptions,
+      generator: request.generator,
+      schema: body.schema,
+    });
   }
 }

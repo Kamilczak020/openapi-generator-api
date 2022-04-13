@@ -1,0 +1,13 @@
+FROM node:16-alpine AS dependencies
+WORKDIR /app
+
+COPY ./package.json ./yarn.lock ./
+RUN yarn
+
+FROM dependencies as runtime
+WORKDIR /app
+
+COPY ./src ./src
+COPY nest-cli.json tsconfig.json ./
+COPY --from=dependencies /app/node_modules ./node_modules
+ENTRYPOINT ["yarn", "run"]

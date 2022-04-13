@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  openapi-generator-api:
+    container_name: openapi-generator-api
+    image: openapi-generator-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app/src
+      - ./dist:/app/dist
+      - ./schemas:/app/schemas
+      - /app/node_modules
+    env_file: .env
+    command: nest:debug

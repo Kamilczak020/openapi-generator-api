@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
@@ -11,6 +11,7 @@
     "target": "esnext",
     "sourceMap": true,
     "incremental": true,
+    "outDir": "",
     "baseUrl": "."
   },
   "include": [
