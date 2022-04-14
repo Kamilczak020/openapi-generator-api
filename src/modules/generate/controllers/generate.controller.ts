@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from '../dto/request';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { CodegenService } from '../services';
 
-@Controller('codegen')
-export class CodegenController {
+@Controller('generate')
+export class GenerateController {
   public constructor(private readonly codegenService: CodegenService) { }
 
   @Get('/generators')
@@ -18,6 +18,7 @@ export class CodegenController {
   ) {
     return this.codegenService.generate({
       generatorOptions: body.generatorOptions,
+      cliOptions: body.cliOptions,
       generator: request.generator,
       schema: body.schema,
     });
