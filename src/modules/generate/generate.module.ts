@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CodegenService } from './services';
-import { CodegenController } from './controllers';
+import { GenerateController } from './controllers';
 
 @Module({
-  controllers: [CodegenController],
+  controllers: [GenerateController],
   providers: [CodegenService],
 })
-export class CodegenModule { }
+export class GenerateModule { }
