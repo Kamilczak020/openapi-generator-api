@@ -8,6 +8,7 @@ import { UseLogger } from '../../logger/decorators';
 import { CodegenException } from '../exceptions';
 import { GeneratorKind } from '../constants';
 import { createWriteStream } from 'fs';
+import shellEscape from 'shell-escape';
 import { spawn } from 'child_process';
 import { Logger } from 'winston';
 import jsZip from 'jszip';
@@ -29,8 +30,6 @@ export class CodegenService {
   public async generate(options: GenerateOptions) {
     const { generatorOptions, cliOptions, generator, schema } = options;
     const schemaFile = await this.writeSchemaToDisk(schema);
-
-    // TODO - sanitize generator input
 
     const outputDirectory = await this.spawnGenerator(
       generatorOptions,
@@ -64,7 +63,7 @@ export class CodegenService {
         '-g', generator,
         '-c', JSON.stringify(generatorOptions),
         '-o', this.configService.outputDirectory,
-        ...flagsAndValues.flat(),
+        shellEscape(flagsAndValues.flat()),
       ]);
 
       process.addListener('error', (error) => {
