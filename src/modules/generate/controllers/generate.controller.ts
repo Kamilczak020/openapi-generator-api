@@ -1,6 +1,7 @@
 import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from '../dto/request';
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, StreamableFile } from '@nestjs/common';
 import { CodegenService } from '../services';
+import { Readable } from 'stream';
 
 @Controller('generate')
 export class GenerateController {
@@ -13,14 +14,18 @@ export class GenerateController {
 
   @Post('/:generator')
   public async generate(
-    @Req() request: GenerateApiClientRequestParams,
+    @Param() params: GenerateApiClientRequestParams,
     @Body() body: GenerateApiClientRequestBody,
   ) {
-    return this.codegenService.generate({
+    const zipStream = await this.codegenService.generate({
       generatorOptions: body.generatorOptions,
       cliOptions: body.cliOptions,
-      generator: request.generator,
+      generator: params.generator,
       schema: body.schema,
     });
+
+    return new StreamableFile(
+      new Readable().wrap(zipStream),
+    );
   }
 }
