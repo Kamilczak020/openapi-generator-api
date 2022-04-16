@@ -10,7 +10,7 @@ export class AppConfigService {
   }
 
   public get isProduction() {
-    const nodeEnv = this.configService.get<string>('NODE_ENV');
-    return nodeEnv === 'production';
+    const environment = this.configService.get<string>('ENVIRONMENT');
+    return environment === 'production';
   }
 }
