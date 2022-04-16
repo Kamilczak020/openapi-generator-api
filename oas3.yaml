@@ -1,0 +1,288 @@
+openapi: 3.0.0
+paths:
+  /generate/generators:
+    get:
+      operationId: GenerateController_getGenerators
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnumerateGeneratorsResponse"
+  "/generate/{generator}":
+    post:
+      operationId: GenerateController_generate
+      parameters:
+        - name: generator
+          required: true
+          in: path
+          description: Type of generator to be used.
+          schema:
+            $ref: "#/components/schemas/GeneratorKind"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateApiClientRequestBody"
+      responses:
+        "201":
+          description: ""
+info:
+  title: OpenAPI Generator API
+  description: An easy to work with API layer to "openapi-generator-cli."
+  version: "3.0"
+  contact: {}
+tags:
+  - name: Codegen
+    description: Operations regarding code generation.
+servers: []
+components:
+  schemas:
+    GeneratorKind:
+      type: string
+      enum:
+        - ada
+        - android
+        - apex
+        - asciidoc
+        - bash
+        - c
+        - clojure
+        - cpp-qt-client
+        - cpp-restsdk
+        - cpp-tiny
+        - cpp-tizen
+        - cpp-ue4
+        - crystal
+        - csharp
+        - csharp-dotnet2
+        - csharp-netcore
+        - cwiki
+        - dart
+        - dart-dio
+        - dart-dio-next
+        - dart-jaguar
+        - dynamic-html
+        - eiffel
+        - elixir
+        - elm
+        - erlang-client
+        - erlang-proper
+        - flash-deprecated
+        - go
+        - go-deprecated
+        - groovy
+        - haskell-http-client
+        - html
+        - html2
+        - java
+        - java-micronaut-client
+        - javascript
+        - javascript-apollo
+        - javascript-closure-angular
+        - javascript-flowtyped
+        - jaxrs-cxf-client
+        - jmeter
+        - k6
+        - kotlin
+        - lua
+        - markdown
+        - nim
+        - objc
+        - ocaml
+        - openapi
+        - openapi-yaml
+        - perl
+        - php
+        - php-dt
+        - plantuml
+        - powershell
+        - python
+        - python-legacy
+        - r
+        - ruby
+        - rust
+        - scala-akka
+        - scala-gatling
+        - scala-httpclient-deprecated
+        - scala-sttp
+        - scalaz
+        - swift4-deprecated
+        - swift5
+        - typescript
+        - typescript-angular
+        - typescript-angularjs-deprecated
+        - typescript-aurelia
+        - typescript-axios
+        - typescript-fetch
+        - typescript-inversify
+        - typescript-jquery
+        - typescript-nestjs
+        - typescript-node
+        - typescript-redux-query
+        - typescript-rxjs
+    EnumerateGeneratorsResponse:
+      type: object
+      properties:
+        generators:
+          type: array
+          description: Types of available generators.
+          items:
+            $ref: "#/components/schemas/GeneratorKind"
+      required:
+        - generators
+    CliGenerateOptions:
+      type: object
+      properties:
+        authorization:
+          type: object
+          description: Authorization headers when fetching the OpenAPI definitions remotely.
+        apiNameSuffix:
+          type: string
+          description: Suffix that will be appended to all API names ("tags").
+        apiPackage:
+          type: string
+          description: Package for generated api classes.
+        artifactId:
+          type: string
+          description: artifactId in generated pom.xml.     This also becomes part of the
+            generated library's filename.
+        artifactVersion:
+          type: string
+          description: artifactVersion in generated pom.xml.     This also becomes part of
+            the generated library's filename.
+        dryRun:
+          type: boolean
+          description: Try things out and report on potential changes     (without
+            actually making changes).
+        templatingEngine:
+          type: string
+          enum:
+            - moustache
+            - handlebars
+          description: Templating engine to use for generating code.
+        enablePostProcessFile:
+          type: boolean
+          description: Enable post-processing file using environment variables.
+        generateAliasAsModel:
+          type: boolean
+          description: Generate model implementation for aliases to map and array schemas.
+        gitHost:
+          type: string
+          description: Git host, e.g. gitlab.com.
+        gitUserId:
+          type: string
+          description: Git user ID, e.g. kamilczak020.
+        gitRepoId:
+          type: string
+          description: Git repo ID, e.g. openapi-generator-api.
+        globalProperties:
+          type: object
+          description: Sets specified global properties.
+        groupId:
+          type: string
+          description: groupId in generated pom.xml.
+        httpUserAgent:
+          type: string
+          description: HTTP user agent, e.g. codegen_csharp_api_client.
+          default: OpenAPI-Generator/{packageVersion}/{language}
+        ignoreFileOverride:
+          description: Specifies files to be put into .openapi-generator-ignore.
+          type: array
+          items:
+            type: string
+        importMappings:
+          type: object
+          description: Specifies mappings between a given class     and the import that
+            should be used for that class.
+        instantiationTypes:
+          type: object
+          description: Sets instantiation type mappings.
+        invokerPackage:
+          type: string
+          description: Root package for generated code.
+        languageSpecificPrimitives:
+          description: Specifies additional language specific primitive types.
+          type: array
+          items:
+            type: string
+        legacyDiscriminatorBehavior:
+          type: boolean
+          description: Set to false for generators with better support for
+            discriminators.     (Python, Java, Go, PowerShell, C#have this
+            enabled by default).
+        library:
+          type: string
+          description: library template (sub-template).
+        minimalUpdate:
+          type: boolean
+          description: Only write output files that have changed.
+        modelNamePrefix:
+          type: string
+          description: Prefix that will be prepended to all model names.
+        modelNameSuffix:
+          type: string
+          description: Suffix that will be prepended to all model names.
+        modelPackage:
+          type: string
+          description: Package for generated models.
+        additionalProperties:
+          type: object
+          description: sets additional properties that can be referenced     by the
+            mustache templates
+        packageName:
+          type: string
+          description: Package for generated classes (where supported).
+        releaseNote:
+          type: string
+          description: Release note.
+          default: Minor update
+        removeOperationIdPrefix:
+          type: boolean
+          description: Remove prefix of operationId, e.g. config_getId => getId.
+        reservedWordsMappings:
+          type: object
+          default: _<name>
+          description: Specifies how a reserved name should be escaped to.     You can
+            also have multiple occurrences of these options.
+        serverVariables:
+          type: object
+          description: Sets server variables overrides for spec documents     which
+            support variable templating of servers.
+        skipOperationExample:
+          type: boolean
+          description: Skip examples defined in operations to avoid out of memory errors.
+        skipValidateSpec:
+          type: boolean
+          description: Skips the default behavior of validating an input specification.
+        strictSpec:
+          type: boolean
+          description: >-
+            'MUST' and 'SHALL' wording in OpenAPI spec is strictly adhered to.
+                e.g. when false, no fixes will be applied to documents which pass
+                validation but don't follow the spec.
+        typeMappings:
+          type: object
+          description: Sets mappings between OpenAPI spec types and generated code types.
+    GenerateApiClientRequestBody:
+      type: object
+      properties:
+        generatorOptions:
+          type: object
+          description: Options to pass to the code generator.     For available options &
+            docs go to https://openapi-generator.tech/docs/generators.
+        cliOptions:
+          description: Options to pass to the cli generate function.     Synonymous with
+            flags, with a few exceptions.
+          allOf:
+            - $ref: "#/components/schemas/CliGenerateOptions"
+        schema:
+          type: string
+          description: OpenAPI Schema to use for generating code.
+      required:
+        - generatorOptions
+        - cliOptions
+        - schema
