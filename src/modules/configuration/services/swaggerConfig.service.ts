@@ -27,6 +27,6 @@ export class SwaggerConfigService {
 
   public get schemaFilePath() {
     return this.configService.get<string>('OPENAPI_SCHEMA_FILE_PATH')
-      || './schemas/api-schema.json';
+      || './schemas/oas3.yaml';
   }
 }

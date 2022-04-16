@@ -3,6 +3,7 @@ import { SwaggerConfigService } from '../configuration/services';
 import { INestApplication } from '@nestjs/common';
 import { readFile, writeFile } from 'fs/promises';
 import { isEqual } from 'lodash';
+import * as yaml from 'yaml';
 
 export abstract class SwaggerBootstrapper {
   public static async bootstrap(app: INestApplication) {
@@ -32,11 +33,11 @@ export abstract class SwaggerBootstrapper {
       const oldDocumentContentBuffer = await readFile(schemaFilePath);
       const oldDocument = oldDocumentContentBuffer.toJSON();
       if (!isEqual(oldDocument, newDocument)) {
-        writeFile(schemaFilePath, JSON.stringify(newDocument));
+        writeFile(schemaFilePath, yaml.stringify(newDocument));
       }
     } catch (error) {
       console.log('Api schema missing or unreadable, skipping comparison and forcing regeneration.');
-      writeFile(schemaFilePath, JSON.stringify(newDocument));
+      writeFile(schemaFilePath, yaml.stringify(newDocument));
     }
   }
 }
