@@ -8,6 +8,7 @@ export class GenerateApiClientRequestParams {
   @ApiProperty({
     type: 'enum',
     enum: GeneratorKind,
+    enumName: 'GeneratorKind',
     description: 'Type of generator to be used.',
   })
   public readonly generator: GeneratorKind;

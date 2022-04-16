@@ -34,7 +34,8 @@
     "rxjs": "^7.5.5",
     "shell-escape": "^0.2.0",
     "swagger-ui-express": "^4.3.0",
-    "winston": "^3.6.0"
+    "winston": "^3.6.0",
+    "yaml": "^2.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.2.4",

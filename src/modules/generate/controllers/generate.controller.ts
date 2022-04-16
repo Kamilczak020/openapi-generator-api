@@ -1,5 +1,7 @@
 import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from '../dto/request';
 import { Body, Controller, Get, Param, Post, Res, StreamableFile } from '@nestjs/common';
+import { EnumerateGeneratorsResponse } from '../dto/response';
+import { ApiResponse } from '@nestjs/swagger';
 import { CodegenService } from '../services';
 import { Readable } from 'stream';
 
@@ -8,8 +10,10 @@ export class GenerateController {
   public constructor(private readonly codegenService: CodegenService) { }
 
   @Get('/generators')
+  @ApiResponse({ status: 200, type: EnumerateGeneratorsResponse })
   public async getGenerators() {
-    return this.codegenService.enumerateGenerators();
+    const generators = this.codegenService.enumerateGenerators();
+    return { generators };
   }
 
   @Post('/:generator')
