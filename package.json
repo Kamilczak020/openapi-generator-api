@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "nest:dev": "nest start --watch",
-    "nest:debug": "ls && nest start --debug 0.0.0.0:9229 --watch",
+    "nest:debug": "nest start --debug 0.0.0.0:9229 --watch",
     "start:prod": "node build/bundle.js",
     "docker:run": "docker compose up",
     "docker:run-rebuild": "docker-compose up -V --build"

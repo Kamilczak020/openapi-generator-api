@@ -36,4 +36,3 @@ export class GenerateApiClientRequestBody {
   })
   public readonly schema: string;
 }
-
