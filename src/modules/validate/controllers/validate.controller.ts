@@ -8,7 +8,7 @@ import { ApiResponse } from '@nestjs/swagger';
 export class ValidateController {
   public constructor(private readonly cliService: OpenAPICliService) { }
 
-  @Post('/:generator')
+  @Post('/')
   @ApiResponse({ status: 200, type: ValidateSchemaResponse })
   public async generate(@Body() body: ValidateSchemaRequestBody) {
     const isValid = await this.cliService.validate({
