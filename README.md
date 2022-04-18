@@ -11,7 +11,7 @@ This is an API Wrapper Container for the [OpenAPI Generator CLI](https://github.
 
 Contrary to [OpenAPI Generator Online](https://github.com/OpenAPITools/openapi-generator-online), it is easily customizable and exposes the entirety of the CLI through REST methods.
 
-<img src="./docs/images/openapi-generator-api-anim.svg">
+<img src="./docs/images/openapi-generator-api-anim.gif">
 
 You can access a SwaggerUI documentation version when you start the server under `<domain>:<port>/api`.
 
