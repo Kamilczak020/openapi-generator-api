@@ -1,5 +1,22 @@
 openapi: 3.0.0
 paths:
+  "/validate/{generator}":
+    post:
+      operationId: ValidateController_generate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateSchemaRequestBody"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateSchemaResponse"
   /generate/generators:
     get:
       operationId: GenerateController_getGenerators
@@ -41,6 +58,22 @@ tags:
 servers: []
 components:
   schemas:
+    ValidateSchemaRequestBody:
+      type: object
+      properties:
+        schema:
+          type: string
+          description: OpenAPI Schema to use for generating code.
+      required:
+        - schema
+    ValidateSchemaResponse:
+      type: object
+      properties:
+        isValid:
+          type: boolean
+          description: Is the provided OpenAPI Schema valid?
+      required:
+        - isValid
     GeneratorKind:
       type: string
       enum:
@@ -285,3 +318,4 @@ components:
       required:
         - generatorOptions
         - cliOptions
+        - schema

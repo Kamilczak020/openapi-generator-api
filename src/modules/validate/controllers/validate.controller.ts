@@ -1,12 +1,15 @@
 import { OpenAPICliService } from 'src/modules/shared/services';
 import { ValidateSchemaRequestBody } from '../dto/request';
+import { ValidateSchemaResponse } from '../dto/response';
 import { Body, Controller, Post } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('validate')
 export class ValidateController {
   public constructor(private readonly cliService: OpenAPICliService) { }
 
   @Post('/:generator')
+  @ApiResponse({ status: 200, type: ValidateSchemaResponse })
   public async generate(@Body() body: ValidateSchemaRequestBody) {
     const isValid = await this.cliService.validate({
       schema: body.schema,
