@@ -1,18 +1,18 @@
 import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from '../dto/request';
-import { Body, Controller, Get, Param, Post, Res, StreamableFile } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, StreamableFile } from '@nestjs/common';
+import { OpenAPICliService } from 'src/modules/shared/services';
 import { EnumerateGeneratorsResponse } from '../dto/response';
 import { ApiResponse } from '@nestjs/swagger';
-import { CodegenService } from '../services';
 import { Readable } from 'stream';
 
 @Controller('generate')
 export class GenerateController {
-  public constructor(private readonly codegenService: CodegenService) { }
+  public constructor(private readonly cliService: OpenAPICliService) { }
 
   @Get('/generators')
   @ApiResponse({ status: 200, type: EnumerateGeneratorsResponse })
   public async getGenerators() {
-    const generators = this.codegenService.enumerateGenerators();
+    const generators = this.cliService.enumerateGenerators();
     return { generators };
   }
 
@@ -21,7 +21,7 @@ export class GenerateController {
     @Param() params: GenerateApiClientRequestParams,
     @Body() body: GenerateApiClientRequestBody,
   ) {
-    const zipStream = await this.codegenService.generate({
+    const zipStream = await this.cliService.generate({
       generatorOptions: body.generatorOptions,
       cliOptions: body.cliOptions,
       generator: params.generator,
