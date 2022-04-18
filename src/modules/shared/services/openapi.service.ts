@@ -1,12 +1,13 @@
-import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from '../dto/request';
-import { CliGenerateOptionsParser } from './cliGenerateOptions.parser';
+import { GenerateApiClientRequestBody, GenerateApiClientRequestParams } from 'src/modules/generate/dto/request';
+import { ValidateSchemaRequestBody } from 'src/modules/validate/dto/request';
+import { CliGenerateOptionsParser } from 'src/modules/generate/services';
 import { GeneratorConfigService } from '../../configuration/services';
+import { CodegenException } from 'src/modules/generate/exceptions';
+import { GeneratorKind } from 'src/modules/generate/constants';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { getRequestContext } from '../../app/contexts';
-import { CliGenerateOptions } from '../dto/helpers';
 import { UseLogger } from '../../logger/decorators';
-import { CodegenException } from '../exceptions';
-import { GeneratorKind } from '../constants';
+import { CliOperation } from '../constants';
 import { createWriteStream } from 'fs';
 import shellEscape from 'shell-escape';
 import { spawn } from 'child_process';
@@ -14,9 +15,10 @@ import { Logger } from 'winston';
 import jsZip from 'jszip';
 
 type GenerateOptions = GenerateApiClientRequestBody & GenerateApiClientRequestParams;
+type ValidateOptions = ValidateSchemaRequestBody;
 
 @Injectable()
-export class CodegenService {
+export class OpenAPICliService {
   public constructor(
     @UseLogger('CodegenService')
     private readonly logger: Logger,
@@ -27,19 +29,37 @@ export class CodegenService {
     return Object.values(GeneratorKind);
   }
 
+  public async validate(options: ValidateOptions) {
+    const { schema } = options;
+    const schemaFile = await this.writeSchemaToDisk(schema);
+
+    try {
+      await this.spawnCLI(CliOperation.Validate, [
+        '-i', schemaFile,
+      ]);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   public async generate(options: GenerateOptions) {
     const { generatorOptions, cliOptions, generator, schema } = options;
     const schemaFile = await this.writeSchemaToDisk(schema);
 
-    const outputDirectory = await this.spawnGenerator(
-      generatorOptions,
-      cliOptions,
-      generator,
-      schemaFile,
-    );
+    const flagsAndValues = CliGenerateOptionsParser
+      .getCliFlagsAndValues(cliOptions);
+
+    await this.spawnCLI(CliOperation.Generate, [
+      '-i', schemaFile,
+      '-g', generator,
+      '-c', JSON.stringify(generatorOptions),
+      '-o', this.configService.outputDirectory,
+      ...flagsAndValues.flat(),
+    ]);
 
     const zip = new jsZip();
-    zip.folder(outputDirectory);
+    zip.folder(this.configService.outputDirectory);
 
     return zip.generateNodeStream({
       type: 'nodebuffer',
@@ -47,23 +67,11 @@ export class CodegenService {
     });
   }
 
-  private async spawnGenerator(
-    generatorOptions: Record<string, any>,
-    cliOptions: CliGenerateOptions,
-    generator: GeneratorKind,
-    schemaFile: string,
-  ) {
-    const flagsAndValues = CliGenerateOptionsParser
-      .getCliFlagsAndValues(cliOptions);
-
-    return new Promise<string>((resolve, reject) => {
+  private spawnCLI(operation: CliOperation, flagsAndValues: Array<string>) {
+    return new Promise<void>((resolve, reject) => {
       const process = spawn('openapi-generator-cli', [
-        'generate',
-        '-i', schemaFile,
-        '-g', generator,
-        '-c', JSON.stringify(generatorOptions),
-        '-o', this.configService.outputDirectory,
-        shellEscape(flagsAndValues.flat()),
+        operation,
+        shellEscape(flagsAndValues),
       ]);
 
       process.addListener('error', (error) => {
@@ -75,8 +83,8 @@ export class CodegenService {
       });
 
       process.addListener('close', () => {
-        this.logger.info('Generator process finished and successfully closed.');
-        resolve(this.configService.outputDirectory);
+        this.logger.info('CLI process finished and successfully closed.');
+        resolve();
       });
     });
   }

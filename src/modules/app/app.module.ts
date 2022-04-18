@@ -1,6 +1,8 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { RequestScopeInjectorMiddleware } from './middleware';
+import { ValidateModule } from '../validate/validate.module';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigurationModule } from '../configuration';
+import { SharedModule } from '../shared/shared.module';
 import { GenerateModule } from '../generate';
 import { LoggerModule } from '../logger';
 
@@ -8,7 +10,9 @@ import { LoggerModule } from '../logger';
   imports: [
     LoggerModule.forRoot(),
     ConfigurationModule,
+    ValidateModule,
     GenerateModule,
+    SharedModule,
   ],
 })
 export class AppModule {
