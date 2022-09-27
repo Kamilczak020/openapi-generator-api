@@ -5,15 +5,16 @@ services:
     container_name: openapi-generator-api
     image: openapi-generator-api
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: resources/docker/Dockerfile
       target: runtime
     ports:
       - "5000:5000"
+      - "9229:9229"
     volumes:
-      - ./src:/app/src
-      - ./dist:/app/dist
-      - ./:/app/schemas
+      - ../../src:/app/src
+      - ../../dist:/app/dist
+      - ../../:/app/schemas
       - /app/node_modules
-    env_file: .env
+    env_file: ../../.env
     command: nest:debug

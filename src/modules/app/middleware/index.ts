@@ -1,1 +1,1 @@
-export * from './requestScopeInjector.middleware';
+export * from './contextInjector.middleware';

@@ -2,7 +2,7 @@ import {
   appConfigSchema,
   swaggerConfigSchema,
   generatorConfigSchema,
-} from '../../configuration';
+} from './schemas';
 import {
   AppConfigService,
   SwaggerConfigService,

@@ -4,11 +4,16 @@ import { exists } from 'src/util';
 import { getCliFlagNames } from '../decorators';
 import { CliGenerateOptions } from '../dto/helpers';
 
-export abstract class CliGenerateOptionsParser {
-  public static getCliFlagsAndValues(options: CliGenerateOptions) {
-    const cliFlags = getCliFlagNames(options);
+type OptionKeyValue = [string, keyof typeof CliGenerateOptions];
 
-    const cliFlagsAndValues = [];
+export abstract class CliGenerateOptionsParser {
+  public static getCliFlagsAndValues(options: CliGenerateOptions): Array<OptionKeyValue> {
+    if (!exists(options)) {
+      return [];
+    }
+
+    const cliFlags = getCliFlagNames(options);
+    const cliFlagsAndValues: Array<OptionKeyValue> = [];
     const propNames = Object.getOwnPropertyNames(options);
     for (const propName of propNames) {
       this.checkForUnsupportedFlags(propName);
@@ -20,7 +25,7 @@ export abstract class CliGenerateOptionsParser {
         );
       }
 
-      const flagValuePair = [flagName, options[propName]];
+      const flagValuePair: OptionKeyValue = [flagName, options[propName]];
       cliFlagsAndValues.push(flagValuePair);
     }
 

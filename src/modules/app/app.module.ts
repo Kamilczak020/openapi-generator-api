@@ -1,4 +1,4 @@
-import { RequestScopeInjectorMiddleware } from './middleware';
+import { ContextInjectorMiddleware } from './middleware';
 import { ValidateModule } from '../validate/validate.module';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigurationModule } from '../configuration';
@@ -17,6 +17,6 @@ import { LoggerModule } from '../logger';
 })
 export class AppModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestScopeInjectorMiddleware).forRoutes('*');
+    consumer.apply(ContextInjectorMiddleware).forRoutes('*');
   }
 }

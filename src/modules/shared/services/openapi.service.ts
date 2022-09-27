@@ -5,79 +5,44 @@ import { GeneratorConfigService } from '../../configuration/services';
 import { CodegenException } from 'src/modules/generate/exceptions';
 import { GeneratorKind } from 'src/modules/generate/constants';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { getRequestContext } from '../../app/contexts';
 import { UseLogger } from '../../logger/decorators';
+import * as shellEscape from 'shell-escape';
 import { CliOperation } from '../constants';
-import { createWriteStream } from 'fs';
-import shellEscape from 'shell-escape';
 import { spawn } from 'child_process';
 import { Logger } from 'winston';
-import jsZip from 'jszip';
-
-type GenerateOptions = GenerateApiClientRequestBody & GenerateApiClientRequestParams;
-type ValidateOptions = ValidateSchemaRequestBody;
+import { CliDiskService } from './cliDisk.service';
 
 @Injectable()
-export class OpenAPICliService {
+export abstract class OpenApiCliService {
   public constructor(
     @UseLogger('CodegenService')
-    private readonly logger: Logger,
-    private readonly configService: GeneratorConfigService,
+    protected readonly logger: Logger,
+    protected readonly configService: GeneratorConfigService,
+    protected readonly cliDiskService: CliDiskService,
   ) { }
 
   public enumerateGenerators() {
     return Object.values(GeneratorKind);
   }
 
-  public async validate(options: ValidateOptions) {
-    const { schema } = options;
-    const schemaFile = await this.writeSchemaToDisk(schema);
-
-    try {
-      await this.spawnCLI(CliOperation.Validate, [
-        '-i', schemaFile,
-      ]);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  public async generate(options: GenerateOptions) {
-    const { generatorOptions, cliOptions, generator, schema } = options;
-    const schemaFile = await this.writeSchemaToDisk(schema);
-
-    const flagsAndValues = CliGenerateOptionsParser
-      .getCliFlagsAndValues(cliOptions);
-
-    await this.spawnCLI(CliOperation.Generate, [
-      '-i', schemaFile,
-      '-g', generator,
-      '-c', JSON.stringify(generatorOptions),
-      '-o', this.configService.outputDirectory,
-      ...flagsAndValues.flat(),
-    ]);
-
-    const zip = new jsZip();
-    zip.folder(this.configService.outputDirectory);
-
-    return zip.generateNodeStream({
-      type: 'nodebuffer',
-      streamFiles: true,
-    });
-  }
-
-  private spawnCLI(operation: CliOperation, flagsAndValues: Array<string>) {
+  protected spawnCLI(operation: CliOperation, flagsAndValues: Array<string>) {
     return new Promise<void>((resolve, reject) => {
       const process = spawn('openapi-generator-cli', [
         operation,
         shellEscape(flagsAndValues),
       ]);
 
-      process.addListener('error', (error) => {
-        process.disconnect();
+      process.stdout.setEncoding('utf8');
+      process.stdout.on('data', (data) => {
+        console.log(data);
+      });
+
+      process.stderr.setEncoding('utf8');
+      process.stderr.on('data', (data) => {
+        process.removeAllListeners();
+
         reject(new CodegenException(
-          error.message,
+          data,
           HttpStatus.INTERNAL_SERVER_ERROR,
         ));
       });
@@ -86,21 +51,6 @@ export class OpenAPICliService {
         this.logger.info('CLI process finished and successfully closed.');
         resolve();
       });
-    });
-  }
-
-  private writeSchemaToDisk(schema: string) {
-    const requestContext = getRequestContext();
-
-    const fileName = `${requestContext.requestID}-schema.json`;
-    const filePath = `${this.configService.tmpDirectory}/${fileName}`;
-    const writeStream = createWriteStream(filePath);
-
-    return new Promise<string>((resolve, reject) => {
-      writeStream.on('finish', () => resolve(fileName));
-      writeStream.on('error', reject);
-      writeStream.write(schema);
-      writeStream.end();
     });
   }
 }

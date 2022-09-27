@@ -1,12 +1,12 @@
-import { OpenAPICliService } from 'src/modules/shared/services';
 import { ValidateSchemaRequestBody } from '../dto/request';
 import { ValidateSchemaResponse } from '../dto/response';
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
+import { ValidatorCliService } from '../services/validatorCli.service';
 
 @Controller('validate')
 export class ValidateController {
-  public constructor(private readonly cliService: OpenAPICliService) { }
+  public constructor(private readonly cliService: ValidatorCliService) { }
 
   @Post('/')
   @ApiResponse({ status: 200, type: ValidateSchemaResponse })

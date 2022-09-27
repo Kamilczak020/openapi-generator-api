@@ -1,13 +1,19 @@
 import { Global, Module } from '@nestjs/common';
-import { OpenAPICliService } from './services';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './filters/exception.filter';
+import { CliDiskService } from './services/cliDisk.service';
 
 @Global()
 @Module({
   providers: [
-    OpenAPICliService,
+    CliDiskService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
   ],
   exports: [
-    OpenAPICliService,
+    CliDiskService,
   ],
 })
 export class SharedModule { }

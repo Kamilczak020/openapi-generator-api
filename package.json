@@ -9,8 +9,9 @@
     "nest:dev": "nest start --watch",
     "nest:debug": "nest start --debug 0.0.0.0:9229 --watch",
     "start:prod": "node build/bundle.js",
-    "docker:run": "docker compose up",
-    "docker:run-rebuild": "docker-compose up -V --build"
+    "docker:compose": "docker-compose -f resources/docker/docker-compose.yml",
+    "docker:run": "yarn run docker:compose up",
+    "docker:run-rebuild": "yarn run docker:compose up -V --build"
   },
   "dependencies": {
     "@anatine/esbuild-decorators": "^0.2.18",
@@ -25,6 +26,7 @@
     "class-validator": "^0.13.2",
     "date-fns": "^2.28.0",
     "esbuild-plugin-tsc": "^0.3.0",
+    "glob": "^8.0.3",
     "joi": "^17.6.0",
     "json-stringify-pretty-compact": "^3.0.0",
     "jszip": "^3.9.1",
