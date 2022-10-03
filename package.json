@@ -19,7 +19,7 @@
     "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.4.3",
     "@nestjs/platform-express": "^8.4.3",
-    "@nestjs/swagger": "^5.2.1",
+    "@nestjs/swagger": "^6.0.0",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "chalk": "^5.0.1",
     "class-transformer": "^0.5.1",
