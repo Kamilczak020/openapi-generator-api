@@ -63,7 +63,7 @@
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.5.1",
     "live-server": "^1.2.1",
-    "nodemon": "^2.0.15",
+    "nodemon": "2.0.20",
     "source-map-support": "^0.5.21",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
