@@ -1,4 +1,4 @@
-FROM node:16-alpine AS base
+FROM node:19-alpine AS base
 RUN apk add openjdk11
 
 FROM base AS dependencies
