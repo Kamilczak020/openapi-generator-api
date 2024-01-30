@@ -56,7 +56,7 @@
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "chokidar": "^3.5.3",
-    "esbuild": "^0.14.28",
+    "esbuild": "^0.20.0",
     "esbuild-node-externals": "^1.4.1",
     "eslint": "7.32.0",
     "eslint-config-airbnb-typescript": "^16.1.4",
